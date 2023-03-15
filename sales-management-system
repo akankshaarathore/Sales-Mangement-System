@@ -1,0 +1,72 @@
+#include <iostream>
+#include <iomanip>
+#include <vector>
+#include <string>
+using namespace std;
+
+class Product {
+public:
+    string name;
+    double price;
+    int quantity;
+    Product(string n, double p, int q) {
+        name = n;
+        price = p;
+        quantity = q;
+    }
+};
+
+class SalesManager {
+public:
+    vector<Product> products;
+    void add_product(string name, double price, int quantity) {
+        Product product(name, price, quantity);
+        products.push_back(product);
+    }
+    void display_products() {
+        cout << "PRODUCTS:" << endl;
+        cout << setw(20) << left << "Name"
+            << setw(10) << left << "Price"
+            << setw(10) << left << "Quantity"
+            << endl;
+        for (Product product : products) {
+            cout << setw(20) << left << product.name
+                << setw(10) << left << product.price
+                << setw(10) << left << product.quantity
+                << endl;
+        }
+    }
+    void make_sale(string name, int quantity) {
+        for (Product& product : products) {
+            if (product.name == name) {
+                if (product.quantity >= quantity) {
+                    product.quantity -= quantity;
+                    cout << "Sale made: " << quantity << " " << name
+                        << " for $" << quantity * product.price << endl;
+                }
+                else {
+                    cout << "Error: Insufficient stock for " << name << endl;
+                }
+                return;
+            }
+        }
+        cout << "Error: Product not found - " << name << endl;
+    }
+};
+
+int main() {
+    SalesManager manager;
+    manager.add_product("Apple", 0.99, 10);
+    manager.add_product("Banana", 0.49, 20);
+    manager.add_product("Orange", 0.79, 15);
+
+    manager.display_products();
+
+    manager.make_sale("Apple", 3);
+    manager.make_sale("Orange", 20);
+    manager.make_sale("Grapes", 5);
+
+    manager.display_products();
+
+    return 0;
+}
